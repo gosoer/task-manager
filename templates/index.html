@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">◫</span>
+        <div>
+          <strong>TaskFlow</strong>
+          <small>Task Manager</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-view="board">
+          <span class="nav-icon">▦</span> Доска
+        </button>
+        <button class="nav-btn" data-view="notifications">
+          <span class="nav-icon">✉</span> Уведомления
+          <span class="nav-badge hidden" id="notif-badge">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section">
+        <h3>Команда</h3>
+        <ul class="user-list" id="user-list"></ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Проекты</h3>
+        <ul class="project-list" id="project-list"></ul>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="page-title">Доска задач</h1>
+          <p class="page-desc" id="page-desc">Kanban-управление задачами</p>
+        </div>
+        <div class="topbar-right">
+          <div class="stats" id="stats"></div>
+          <button class="btn btn-primary" id="btn-new-task">+ Новая задача</button>
+        </div>
+      </header>
+
+      <!-- VIEW: Board -->
+      <section class="view active" id="view-board">
+        <div class="filters-bar">
+          <select id="filter-priority">
+            <option value="">Все приоритеты</option>
+            <option value="low">Низкий</option>
+            <option value="high">Высокий</option>
+            <option value="critical">Критический</option>
+          </select>
+          <select id="filter-assignee">
+            <option value="">Все исполнители</option>
+          </select>
+          <input type="search" id="filter-search" placeholder="Поиск по названию…">
+        </div>
+
+        <div class="kanban" id="kanban">
+          <div class="kanban-col" data-status="todo">
+            <div class="col-header">
+              <span class="col-dot todo"></span>
+              <h2>К выполнению</h2>
+              <span class="col-count" id="count-todo">0</span>
+            </div>
+            <div class="col-body" id="col-todo"></div>
+          </div>
+          <div class="kanban-col" data-status="in_progress">
+            <div class="col-header">
+              <span class="col-dot progress"></span>
+              <h2>В работе</h2>
+              <span class="col-count" id="count-in_progress">0</span>
+            </div>
+            <div class="col-body" id="col-in_progress"></div>
+          </div>
+          <div class="kanban-col" data-status="done">
+            <div class="col-header">
+              <span class="col-dot done"></span>
+              <h2>Готово</h2>
+              <span class="col-count" id="count-done">0</span>
+            </div>
+            <div class="col-body" id="col-done"></div>
+          </div>
+          <div class="kanban-col" data-status="cancelled">
+            <div class="col-header">
+              <span class="col-dot cancelled"></span>
+              <h2>Отменено</h2>
+              <span class="col-count" id="count-cancelled">0</span>
+            </div>
+            <div class="col-body" id="col-cancelled"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: Notifications -->
+      <section class="view" id="view-notifications">
+        <div class="notif-header">
+          <select id="notif-user"></select>
+          <button class="btn btn-ghost" id="btn-refresh-notif">Обновить</button>
+        </div>
+        <div class="notif-list" id="notif-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal: Create Task -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Новая задача</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="create-form">
+        <label>
+          Название
+          <input type="text" id="title" required placeholder="Например: Настроить деплой">
+        </label>
+        <label>
+          Описание
+          <textarea id="description" rows="3" placeholder="Подробности задачи…"></textarea>
+        </label>
+        <div class="form-row">
+          <label>
+            Приоритет
+            <select id="priority">
+              <option value="low">🟢 Низкий</option>
+              <option value="high">🟡 Высокий</option>
+              <option value="critical">🔴 Критический</option>
+            </select>
+          </label>
+          <label>
+            Исполнитель
+            <select id="assignee"></select>
+          </label>
+        </div>
+        <label>
+          Проект
+          <select id="project"></select>
+        </label>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Отмена</button>
+          <button type="submit" class="btn btn-primary">Создать задачу</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
